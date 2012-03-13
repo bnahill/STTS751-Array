@@ -1,0 +1,7 @@
+I2C1:
+	SDA = PB7 on P2 (SDA1 on board)
+	SCL = PB8 on P2 (SCL1 on board)
+I2C3:
+	SCL = PA8 on P2 (SDA2 on board)
+	SDA = PC9 on P2 (SCL2 on board)
+
