@@ -5942,7 +5942,7 @@ DIN A3, landscape with location and doc. field</description>
 <part name="R10" library="resistor" deviceset="R-US_" device="R0402" value="22k"/>
 <part name="R11" library="resistor" deviceset="R-US_" device="R0402" value="22k"/>
 <part name="R12" library="resistor" deviceset="R-US_" device="R0402" value="22k"/>
-<part name="JP1" library="pinhead" deviceset="PINHD-2X16" device=""/>
+<part name="J1" library="pinhead" deviceset="PINHD-2X16" device=""/>
 <part name="R13" library="resistor" deviceset="R-US_" device="R0402" value="22k"/>
 <part name="R14" library="resistor" deviceset="R-US_" device="R0402" value="22k"/>
 <part name="R15" library="resistor" deviceset="R-US_" device="R0402" value="22k"/>
@@ -5979,7 +5979,7 @@ DIN A3, landscape with location and doc. field</description>
 <instance part="R10" gate="G$1" x="25.4" y="53.34" rot="R90"/>
 <instance part="R11" gate="G$1" x="45.72" y="53.34" rot="R90"/>
 <instance part="R12" gate="G$1" x="76.2" y="53.34" rot="R90"/>
-<instance part="JP1" gate="A" x="-50.8" y="30.48"/>
+<instance part="J1" gate="A" x="-50.8" y="30.48"/>
 <instance part="R13" gate="G$1" x="-7.62" y="35.56" rot="R90"/>
 <instance part="R14" gate="G$1" x="-7.62" y="12.7" rot="R90"/>
 <instance part="R15" gate="G$1" x="-7.62" y="-10.16" rot="R90"/>
@@ -6015,7 +6015,7 @@ DIN A3, landscape with location and doc. field</description>
 <junction x="-5.08" y="45.72"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="3"/>
+<pinref part="J1" gate="A" pin="3"/>
 <wire x1="-53.34" y1="45.72" x2="-66.04" y2="45.72" width="0.1524" layer="91"/>
 <label x="-58.42" y="45.72" size="1.778" layer="95" rot="MR0"/>
 </segment>
@@ -6042,7 +6042,7 @@ DIN A3, landscape with location and doc. field</description>
 <junction x="33.02" y="0"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="6"/>
+<pinref part="J1" gate="A" pin="6"/>
 <wire x1="-45.72" y1="43.18" x2="-30.48" y2="43.18" width="0.1524" layer="91"/>
 <label x="-40.64" y="43.18" size="1.778" layer="95"/>
 </segment>
@@ -6069,7 +6069,7 @@ DIN A3, landscape with location and doc. field</description>
 <junction x="38.1" y="22.86"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="28"/>
+<pinref part="J1" gate="A" pin="28"/>
 <wire x1="-45.72" y1="15.24" x2="-30.48" y2="15.24" width="0.1524" layer="91"/>
 <label x="-40.64" y="15.24" size="1.778" layer="95"/>
 </segment>
@@ -6096,7 +6096,7 @@ DIN A3, landscape with location and doc. field</description>
 <junction x="81.28" y="0"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="25"/>
+<pinref part="J1" gate="A" pin="25"/>
 <wire x1="-53.34" y1="17.78" x2="-66.04" y2="17.78" width="0.1524" layer="91"/>
 <label x="-58.42" y="17.78" size="1.778" layer="95" rot="MR0"/>
 </segment>
@@ -6286,7 +6286,7 @@ DIN A3, landscape with location and doc. field</description>
 <junction x="45.72" y="60.96"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="4"/>
+<pinref part="J1" gate="A" pin="4"/>
 <wire x1="-45.72" y1="45.72" x2="-22.86" y2="45.72" width="0.1524" layer="91"/>
 <label x="-40.64" y="45.72" size="1.778" layer="95"/>
 <pinref part="C1" gate="G$1" pin="1"/>
@@ -6344,12 +6344,12 @@ DIN A3, landscape with location and doc. field</description>
 <label x="71.12" y="43.18" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="32"/>
+<pinref part="J1" gate="A" pin="32"/>
 <wire x1="-45.72" y1="10.16" x2="-38.1" y2="10.16" width="0.1524" layer="91"/>
 <wire x1="-38.1" y1="10.16" x2="-38.1" y2="5.08" width="0.1524" layer="91"/>
 <wire x1="-38.1" y1="5.08" x2="-60.96" y2="5.08" width="0.1524" layer="91"/>
 <wire x1="-60.96" y1="5.08" x2="-60.96" y2="10.16" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="31"/>
+<pinref part="J1" gate="A" pin="31"/>
 <wire x1="-60.96" y1="10.16" x2="-53.34" y2="10.16" width="0.1524" layer="91"/>
 <label x="-40.64" y="10.16" size="1.778" layer="95"/>
 <wire x1="-38.1" y1="10.16" x2="-22.86" y2="10.16" width="0.1524" layer="91"/>

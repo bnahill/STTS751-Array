@@ -337,12 +337,6 @@ UsedLibrary="/home/ben/eagle-6.1.0/lbr/zilog.lbr"
 UsedLibrary="megatemp.lbr"
 
 [Win_1]
-Type="Control Panel"
-Loc="148 70 1080 725"
-State=2
-Number=0
-
-[Win_2]
 Type="Schematic Editor"
 Loc="0 0 1439 850"
 State=1
@@ -383,13 +377,13 @@ Layer=91
 Views=" 1: -47.7147 -29.9781 64.9462 45.8217"
 Sheet=1
 
-[Win_3]
+[Win_2]
 Type="Board Editor"
-Loc="-1 0 1438 850"
+Loc="0 0 1439 850"
 State=1
 Number=2
 File="megatemp.brd"
-View="-15.8559 29.1982 16.7238 66.2175"
+View="-59.8996 -23.9009 108.204 167.111"
 WireWidths=" 0 0.254 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0.3048 0.4064"
 PadDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 PadDrills=" 0.5 0.6 0.7 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2 2.2 2.8 3.2 0.8"
@@ -421,6 +415,12 @@ ArcDirection=0
 AddLevel=2
 PadsSameType=0
 Layer=1
+
+[Win_3]
+Type="Control Panel"
+Loc="148 70 1080 725"
+State=2
+Number=0
 
 [Desktop]
 Screen="2720 1024"
