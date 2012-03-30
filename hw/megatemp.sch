@@ -6015,9 +6015,8 @@ DIN A3, landscape with location and doc. field</description>
 <junction x="-5.08" y="45.72"/>
 </segment>
 <segment>
-<pinref part="J1" gate="A" pin="3"/>
-<wire x1="-53.34" y1="45.72" x2="-66.04" y2="45.72" width="0.1524" layer="91"/>
-<label x="-58.42" y="45.72" size="1.778" layer="95" rot="MR0"/>
+<pinref part="J1" gate="A" pin="1"/>
+<wire x1="-53.34" y1="48.26" x2="-66.04" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SDA1" class="0">
@@ -6069,9 +6068,9 @@ DIN A3, landscape with location and doc. field</description>
 <junction x="38.1" y="22.86"/>
 </segment>
 <segment>
-<pinref part="J1" gate="A" pin="28"/>
-<wire x1="-45.72" y1="15.24" x2="-30.48" y2="15.24" width="0.1524" layer="91"/>
-<label x="-40.64" y="15.24" size="1.778" layer="95"/>
+<pinref part="J1" gate="A" pin="25"/>
+<wire x1="-53.34" y1="17.78" x2="-66.04" y2="17.78" width="0.1524" layer="91"/>
+<label x="-58.42" y="17.78" size="1.778" layer="95" rot="MR0"/>
 </segment>
 </net>
 <net name="SDA2" class="0">
@@ -6096,9 +6095,9 @@ DIN A3, landscape with location and doc. field</description>
 <junction x="81.28" y="0"/>
 </segment>
 <segment>
-<pinref part="J1" gate="A" pin="25"/>
-<wire x1="-53.34" y1="17.78" x2="-66.04" y2="17.78" width="0.1524" layer="91"/>
-<label x="-58.42" y="17.78" size="1.778" layer="95" rot="MR0"/>
+<pinref part="J1" gate="A" pin="28"/>
+<wire x1="-45.72" y1="15.24" x2="-30.48" y2="15.24" width="0.1524" layer="91"/>
+<label x="-40.64" y="15.24" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$2" class="0">
