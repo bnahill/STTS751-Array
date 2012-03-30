@@ -98,7 +98,6 @@ LoopFillZerobss:
  ldr     r1,[r0]
  orr     r1,r1,#(0xF << 20)
  str     r1,[r0]
-  bl  ClkOutCfg
 /* Call the clock system intitialization function.*/
   bl  SystemInit   
 /* Call the application's entry point.*/

@@ -1,9 +1,12 @@
 extern "C" {
 	#include "stm32f4xx_conf.h"
 }
+
 #include "temp.h"
 
+#define COUNT(arr) (sizeof(arr) / sizeof(*arr))
 
+#define I2CA             I2C1
 #define I2CA_AF          GPIO_AF_I2C1
 #define I2CA_CLK         RCC_APB1Periph_I2C1
 #define I2CA_SDA_GPIO    GPIOB
@@ -13,6 +16,7 @@ extern "C" {
 #define I2CA_SCL_PIN     GPIO_Pin_8
 #define I2CA_SCL_PINSRC  GPIO_PinSource8
 
+#define I2CB             I2C3
 #define I2CB_AF          GPIO_AF_I2C3
 #define I2CB_CLK         RCC_APB1Periph_I2C3
 #define I2CB_SDA_GPIO    GPIOC
@@ -28,6 +32,10 @@ extern "C" {
 #define TEMP_ADDR_CONF   0x03
 #define TEMP_ADDR_CRATE  0x04
 
+/*
+ Declaration of temperature sensors attached to the system in the order that
+ they should be scanned
+ */
 TemperatureSensor TemperatureSensor::sensors[] = {
 	TemperatureSensor(I2CA, 0b01110110),
 	//{I2CA, 0b10010110, 0, 0},
@@ -42,11 +50,14 @@ TemperatureSensor TemperatureSensor::sensors[] = {
 TemperatureSensor::TemperatureSensor(I2C_TypeDef *I2Cx, uint8_t devicex) :
 	I2C(I2Cx),
 	device(devicex),
-	num_readings(0)
+	num_readings(0),
+	temperature(0.0),
+	status(0)
 {}
 
-void TemperatureSensor::read_status(){
+uint8_t TemperatureSensor::read_status(){
 	status = read_byte(TEMP_ADDR_STAT);
+	return status;
 }
 
 float TemperatureSensor::read(){
@@ -65,7 +76,7 @@ float TemperatureSensor::read(){
 // Private functions
 /////////////////////////////////////////////////////////
 
-void TemperatureSensor::init(void){
+void TemperatureSensor::sensor_init(void){
 	write_byte(TEMP_ADDR_CONF, 0b00001100);
 }
 
@@ -111,12 +122,14 @@ void TemperatureSensor::write_byte(uint8_t address, uint8_t data){
 // Static functions
 /////////////////////////////////////////////////////////
 
-void TemperatureSensor::hw_init(void){
+void TemperatureSensor::init(void){
 	GPIO_InitTypeDef GPIO_InitStructure;
 	I2C_InitTypeDef I2C_InitStructure;
 	TemperatureSensor *sensor;
 	
+	// Enable I2C clocks
 	RCC_APB1PeriphClockCmd(I2CA_CLK | I2CB_CLK, ENABLE);
+	// Enable all GPIO clocks
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA |
 	                       RCC_AHB1Periph_GPIOB |
 	                       RCC_AHB1Periph_GPIOC |
@@ -142,12 +155,13 @@ void TemperatureSensor::hw_init(void){
 	GPIO_InitStructure.GPIO_Pin = I2CB_SCL_PIN;
 	GPIO_Init(I2CB_SCL_GPIO, &GPIO_InitStructure);
 
-	
+	// AF configuration	
 	GPIO_PinAFConfig(I2CA_SDA_GPIO, I2CA_SDA_PINSRC, I2CA_AF);
 	GPIO_PinAFConfig(I2CA_SCL_GPIO, I2CA_SCL_PINSRC, I2CA_AF);
 	GPIO_PinAFConfig(I2CB_SDA_GPIO, I2CB_SDA_PINSRC, I2CB_AF);
 	GPIO_PinAFConfig(I2CB_SCL_GPIO, I2CB_SCL_PINSRC, I2CB_AF);
 	
+	// I2C configuration
 	I2C_DeInit(I2CA);
 	I2C_DeInit(I2CB);
 	I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
@@ -162,17 +176,23 @@ void TemperatureSensor::hw_init(void){
 	I2C_Cmd(I2CA, ENABLE);
 	I2C_Cmd(I2CB, ENABLE);
 
+	// Initialize each temperature sensor
 	for(sensor = sensors; sensor < sensors + COUNT(sensors); sensor++){
-		sensor->init();
+		sensor->sensor_init();
 	}
 }
 
 void TemperatureSensor::read_all(void){
 	TemperatureSensor *sensor;
+	// Just read each sensor in series
 	for(sensor = sensors; sensor < sensors + num_sensors; sensor++){
 		sensor->read();
 	}
 }
+
+/////////////////////////////////////////////////////////
+// Static members
+/////////////////////////////////////////////////////////
 
 const int TemperatureSensor::num_sensors = COUNT(sensors);
 
