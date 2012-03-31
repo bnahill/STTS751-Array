@@ -44,7 +44,7 @@ add_definitions(-DUSE_STDPERIPH_DRIVER -DSTM32F4XX -DHSE_VALUE=8000000 -DARM_MAT
 set(CMAKE_CXX_FLAGS "--std=c++0x -fno-rtti -fno-exceptions")
 # Use the new C11 standard
 set(CMAKE_C_FLAGS "--std=c1x")
-set(CMAKE_EXE_LINKER_FLAGS "-T${CMAKE_SOURCE_DIR}/stm32_flash.ld -Wl,-Map=${TARGET}.map,--cref,--gc-sections -nostartfiles ${MCFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "-T${CMAKE_SOURCE_DIR}/stm32_flash.ld -Wl,-Map=${TARGET}.map,--cref,--gc-sections -nostdlib ${MCFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
 
 include_directories(
 	.

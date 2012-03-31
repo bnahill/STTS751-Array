@@ -6,6 +6,11 @@ extern "C" {
 
 #define COUNT(arr) (sizeof(arr) / sizeof(*arr))
 
+//! @addtogroup temp
+//! @{
+
+//! @name I2C pin mapping
+//! @{
 #define I2CA             I2C1
 #define I2CA_AF          GPIO_AF_I2C1
 #define I2CA_CLK         RCC_APB1Periph_I2C1
@@ -25,35 +30,85 @@ extern "C" {
 #define I2CB_SCL_GPIO    GPIOA
 #define I2CB_SCL_PIN     GPIO_Pin_8
 #define I2CB_SCL_PINSRC  GPIO_PinSource8
+//! @}
 
+//! @name I2C Addresses for STTS751-0xxxx
+//! @{
+#define STTS_ADDR_0_7_5K 0b10010000
+#define STTS_ADDR_0_12K  0b10010010
+#define STTS_ADDR_0_20K  0b01110000
+#define STTS_ADDR_0_33K  0b01110010
+//! @}
+//! @name I2C Addresses for STTS751-1xxxx
+//! @{
+#define STTS_ADDR_1_7_5K 0b10010100
+#define STTS_ADDR_1_12K  0b10010110
+#define STTS_ADDR_1_20K  0b01110100
+#define STTS_ADDR_1_33K  0b01110110
+//! @}
+
+//! @name STTS751 Register map
+//! @{
+
+//! Temperature high
 #define TEMP_ADDR_T_HI   0x00
+//! Status
 #define TEMP_ADDR_STAT   0x01
+//! Temperature low
 #define TEMP_ADDR_T_LO   0x02
+//! Configuration
 #define TEMP_ADDR_CONF   0x03
+//! Conversion rate
 #define TEMP_ADDR_CRATE  0x04
+//! Temperature high limit high byte
+#define TEMP_ADDR_HL_HI  0x05
+//! Temperature high limit low byte
+#define TEMP_ADDR_HL_LO  0x06
+//! Temperature low limit high byte
+#define TEMP_ADDR_LL_HI  0x07
+//! Temperature low limit low byte
+#define TEMP_ADDR_LL_LO  0x08
+//! One-shot register
+#define TEMP_ADDR_1SHOT  0x0F
+//! THERM limit
+#define TEMP_ADDR_TLIM   0x20
+//! THERM hysteresis
+#define TEMP_ADDR_THYST  0x21
+//! SMBus timeout enable
+#define TEMP_ADDR_SMTIM  0x22
+//! Product ID
+#define TEMP_ADDR_PID    0xFD
+//! Manufacturer ID
+#define TEMP_ADDR_MID    0xFE
+//! Revision number
+#define TEMP_ADDR_REV    0xFF
+//! @}
 
-/*
- Declaration of temperature sensors attached to the system in the order that
- they should be scanned
+/*!
+ @brief Device configuration list
+
+ Please define all devices to be used here.
  */
-TemperatureSensor TemperatureSensor::sensors[] = {
-	TemperatureSensor(I2CA, 0b01110110),
-	//{I2CA, 0b10010110, 0, 0},
-	//{I2CB, 0b10010110, 0, 0},
-	//{I2CB, 0b01110110, 0, 0},
+static const struct {
+	I2C_TypeDef *I2C;
+	uint8_t      device;
+} temp_devices_init[] = {
+	{I2CA, STTS_ADDR_1_12K},
+	{I2CA, STTS_ADDR_1_33K},
+	{I2CB, STTS_ADDR_1_33K},
+	{I2CB, STTS_ADDR_1_12K},
 };
+
+const int TemperatureSensor::num_sensors = COUNT(temp_devices_init);
+
+TemperatureSensor TemperatureSensor::sensors[num_sensors];
+
+//! @}
 
 /////////////////////////////////////////////////////////
 // Public functions
 /////////////////////////////////////////////////////////
 
-TemperatureSensor::TemperatureSensor(I2C_TypeDef *I2Cx, uint8_t devicex) :
-	I2C(I2Cx),
-	device(devicex),
-	num_readings(0),
-	temperature(0.0),
-	status(0)
-{}
 
 uint8_t TemperatureSensor::read_status(){
 	status = read_byte(TEMP_ADDR_STAT);
@@ -76,7 +131,13 @@ float TemperatureSensor::read(){
 // Private functions
 /////////////////////////////////////////////////////////
 
-void TemperatureSensor::sensor_init(void){
+void TemperatureSensor::sensor_init(I2C_TypeDef *I2C_, uint8_t device_){
+	I2C = I2C_;
+	device = device_;
+	num_readings = 0;
+	temperature = 0.0;
+	status = 0;
+	
 	write_byte(TEMP_ADDR_CONF, 0b00001100);
 }
 
@@ -125,7 +186,6 @@ void TemperatureSensor::write_byte(uint8_t address, uint8_t data){
 void TemperatureSensor::init(void){
 	GPIO_InitTypeDef GPIO_InitStructure;
 	I2C_InitTypeDef I2C_InitStructure;
-	TemperatureSensor *sensor;
 	
 	// Enable I2C clocks
 	RCC_APB1PeriphClockCmd(I2CA_CLK | I2CB_CLK, ENABLE);
@@ -176,23 +236,19 @@ void TemperatureSensor::init(void){
 	I2C_Cmd(I2CA, ENABLE);
 	I2C_Cmd(I2CB, ENABLE);
 
-	// Initialize each temperature sensor
-	for(sensor = sensors; sensor < sensors + COUNT(sensors); sensor++){
-		sensor->sensor_init();
+	for(int i = 0; i < num_sensors; i++){
+		sensors[i].sensor_init(temp_devices_init[i].I2C, temp_devices_init[i].device);
 	}
 }
 
 void TemperatureSensor::read_all(void){
+	static float results[num_sensors];
+	float *result = results;
 	TemperatureSensor *sensor;
 	// Just read each sensor in series
 	for(sensor = sensors; sensor < sensors + num_sensors; sensor++){
-		sensor->read();
+		*(result++) = sensor->read();
 	}
 }
 
-/////////////////////////////////////////////////////////
-// Static members
-/////////////////////////////////////////////////////////
-
-const int TemperatureSensor::num_sensors = COUNT(sensors);
 

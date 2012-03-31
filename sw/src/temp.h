@@ -5,19 +5,14 @@ extern "C" {
 	#include "stm32f4xx_conf.h"
 };
 
+//! @addtogroup temp STTS751 Temperature Sensor
+//! @{
 
 /*!
  @brief An interface to the temperature sensors
  */
 class TemperatureSensor{
 public:
-	/*!
-	 @brief Constructor for TemperatureSensor
-	 @param I2C The I2C peripheral to be used
-	 @param device The I2C address on the provided bus
-	 */
-	TemperatureSensor(I2C_TypeDef *I2C, uint8_t device);
-
 	/*!
 	 @brief Read the temperature value for the provided sensor
 	 @return Temperature
@@ -46,6 +41,7 @@ public:
 	 @post The devices may now be used
 	 */
 	static void init(void);
+	
 	//! @brief Read the values of all sensors
 	static void read_all(void);
 	
@@ -53,9 +49,9 @@ public:
 	static TemperatureSensor sensors[];
 private:
 	//! The I2C peripheral used
-	I2C_TypeDef *const I2C;
+	I2C_TypeDef        *I2C;
 	//! The device address
-	uint8_t      const device;
+	uint8_t            device;
 	//! The status as returned by the device
 	uint8_t            status;
 	//! The most recent temperature reading -- Invalid if num_readings < 1
@@ -72,23 +68,26 @@ private:
 
 	/*!
 	 @brief Initialize the device
+	 @param I2C The I2C peripheral to be used
+	 @param device The I2C address on the provided bus
+	 
 	 @pre init() has run
 	 @post The device is configured for 12-bit precision
 	 
 	 This is intended to be done by init() and involves I2C write
 	 */
-	void sensor_init(void);
+	void sensor_init(I2C_TypeDef *I2C, uint8_t device);
 
 	/*!
-	 @brief Write a single byte (data) to the address specified using the
-	 provided temperature sensor
+	 @brief Write a single byte to the address specified
 
-	 @param sensor  The sensor to use
 	 @param address The address within the peripheral's memory to write to
 	 @param data    The data to write
 	 */
 	void write_byte(uint8_t address, uint8_t data);
 };
+
+//! @}
 
 #endif
 

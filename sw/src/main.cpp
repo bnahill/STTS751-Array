@@ -4,7 +4,7 @@
 
 #include "temp.h"
 
-#define SYSTICK_MS ((SystemCoreClock / 8) / 1000)
+#define SYSTICK_MS (((double)SystemCoreClock / 8.0) / 1000.0)
 
 #define LED_GPIO GPIOD
 #define LED_PIN(x) (GPIO_Pin_12 << x)
