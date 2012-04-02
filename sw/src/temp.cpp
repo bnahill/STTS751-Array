@@ -94,9 +94,9 @@ static const struct {
 	uint8_t      device;
 } temp_devices_init[] = {
 	{I2CA, STTS_ADDR_1_12K},
-	{I2CA, STTS_ADDR_1_33K},
-	{I2CB, STTS_ADDR_1_33K},
-	{I2CB, STTS_ADDR_1_12K},
+//	{I2CA, STTS_ADDR_1_33K},
+//	{I2CB, STTS_ADDR_1_12K},
+//	{I2CB, STTS_ADDR_1_33K},
 };
 
 const int TemperatureSensor::num_sensors = COUNT(temp_devices_init);

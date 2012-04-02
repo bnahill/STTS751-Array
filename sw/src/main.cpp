@@ -4,8 +4,11 @@
 
 #include "temp.h"
 
+//! A single millisecond tick
 #define SYSTICK_MS (((double)SystemCoreClock / 8.0) / 1000.0)
 
+//! @name LED macros
+//! @{
 #define LED_GPIO GPIOD
 #define LED_PIN(x) (GPIO_Pin_12 << x)
 #define LED_PIN_ALL (LED_PIN(0) | LED_PIN(1) | LED_PIN(2) | LED_PIN(3))
@@ -13,8 +16,9 @@
 #define LED_SET(x)    (LED_GPIO->ODR |= LED_PIN(x))
 #define LED_CLR(x)    (LED_GPIO->ODR &= ~LED_PIN(x))
 #define LED_CLR_ALL() (LED_GPIO->ODR &= ~LED_PIN_ALL)
+//! @}
 
-// A flag to detect each tick
+//! A flag to detect each tick
 static volatile int tick = 0;
 
 // Symbols to define as C symbols
@@ -23,9 +27,9 @@ extern "C"{
 	void SysTick_Handler(void);
 };
 
-// Wait for a tick and reset the ticker
+//! @brief Wait for a tick and reset the ticker
 static inline void wait_tick(void){
-	while(!tick); tick = 0;
+	while(tick == 0); tick = 0;
 }
 
 int main(void){
@@ -43,12 +47,12 @@ int main(void){
 
 	TemperatureSensor::init();
 
-	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
-
 	// Configure SysTick for 200ms period	
-	if(SysTick_Config(200 * SYSTICK_MS)){
+	if(SysTick_Config(200.0 * SYSTICK_MS)){
 		while(1);
 	}
+	// THEN specify to divide this clock by 8
+	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
 
 	while (1){
 		LED_SET(0);
