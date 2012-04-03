@@ -5,9 +5,9 @@
 #include "temp.h"
 #include "button.h"
 #include "flash.h"
+#include "tick.h"
 
-//! A single millisecond tick
-#define SYSTICK_MS (((double)SystemCoreClock / 8.0) / 1000.0)
+//! @defgroup util Utilities
 
 //! @name LED macros
 //! @{
@@ -20,19 +20,12 @@
 #define LED_CLR_ALL() (LED_GPIO->ODR &= ~LED_PIN_ALL)
 //! @}
 
-//! A flag to detect each tick
-static volatile int tick = 0;
-
 // Symbols to define as C symbols
 extern "C"{
 	int main(void);
 	void SysTick_Handler(void);
 };
 
-//! @brief Wait for a tick and reset the ticker
-static inline void wait_tick(void){
-	while(tick == 0); tick = 0;
-}
 
 int main(void){
 	// GPIOD Periph clock enable
@@ -58,32 +51,25 @@ int main(void){
 	Flash::init(TemperatureSensor::num_sensors);
 	
 	// Configure SysTick for 200ms period	
-	if(SysTick_Config(200.0 * SYSTICK_MS)){
+	if(!Tick::start(200)){
 		while(1);
 	}
 
-	// THEN specify to divide this clock by 8
-	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
-
 	while (1){
 		LED_SET(0);
-		wait_tick();
+		Tick::wait();
 		LED_SET(1);
-		wait_tick();
+		Tick::wait();
 		LED_SET(2);
-		wait_tick();
+		Tick::wait();
 		LED_SET(3);
-		wait_tick();
+		Tick::wait();
 
 		LED_CLR_ALL();
 
-		wait_tick();
+		Tick::wait();
 
 		TemperatureSensor::read_all();
 	}
-}
-
-void SysTick_Handler(void){
-	tick = 1;
 }
 

@@ -23,7 +23,7 @@ public:
 	 @param period_ms Number of milliseconds in period
 	 @return True if successful
 	 */
-	static bool start(uint32_t period_ms);
+	static bool start(float period_ms);
 
 	/*!
 	 @brief Wait for the next tick

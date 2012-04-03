@@ -21,8 +21,8 @@ uint32_t Flash::offset = 0;
 bool Flash::ready = false;
 
 // This order is important, as it ensures that &num_sensors is the correct start address...
-__attribute__ ((section(".store"))) uint32_t Flash::num_sensors;
-__attribute__ ((section(".store"))) float Flash::sensor_data[avail_words];
+uint32_t Flash::num_sensors __attribute__ ((section(".store")));
+float Flash::sensor_data[avail_words] __attribute__ ((section(".store")));
 
 
 void Flash::init(uint32_t num_sensors_){

@@ -17,8 +17,8 @@ public:
 	 @brief Read the temperature value for the provided sensor
 	 @return Temperature
 
-	 @post The temperature value will be stored in #temperature and the
-	 reading count will be incremented
+	 @post The temperature value will be stored in #temperature and the 
+	 reading count will be incremented.
 	 */
 	float read(void);
 
@@ -42,7 +42,10 @@ public:
 	 */
 	static void init(void);
 	
-	//! @brief Read the values of all sensors
+	/*!
+	 @brief Read the values of all sensors. If Flash has been initialized,
+	 the value will be written to flash as well.
+	 */
 	static void read_all(void);
 	
 	//! The temperature sensor devices

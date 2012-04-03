@@ -5,8 +5,8 @@
 
 volatile int Tick::tick;
 
-bool Tick::start(uint32_t period_ms){
-	bool ret = SysTick_Config((float)period_ms * SYSTICK_MS);
+bool Tick::start(float period_ms){
+	bool ret = !SysTick_Config((float)period_ms * SYSTICK_MS);
 	tick = 0;
 	// THEN specify to divide this clock by 8
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);

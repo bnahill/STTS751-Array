@@ -15,9 +15,7 @@ void Button::init(){
 }
 
 
-int Button::read(){
-	if(BUTTON_GPIO->IDR & BUTTON_PIN)
-		return 1;
-	return 0;
+bool Button::read(){
+	return (BUTTON_GPIO->IDR & BUTTON_PIN) != 0;
 }
 

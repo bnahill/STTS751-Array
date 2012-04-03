@@ -37,7 +37,7 @@ set(MCU cortex-m4)
 set(MCFLAGS "-mcpu=${MCU} -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
 
 add_definitions(${MCFLAGS})
-add_definitions(-g  -fdata-sections -fpromote-loop-indices -Wredundant-decls -Wshadow -Wcast-qual -Wcast-align)
+add_definitions(-g -ffunction-sections  -fdata-sections -fpromote-loop-indices -Wredundant-decls -Wshadow -Wcast-qual -Wcast-align)
 add_definitions(-DUSE_STDPERIPH_DRIVER -DSTM32F4XX -DHSE_VALUE=8000000 -DARM_MATH_CM4 -D__FPU_PRESENT)
 
 # Eliminate the need for a bunch of extra support code that may not work on the chip anyways
@@ -355,6 +355,7 @@ set(APP_SOURCES
 	${APP_DIR}/main.cpp
 	${APP_DIR}/button.cpp
 	${APP_DIR}/flash.cpp
+	${APP_DIR}/tick.cpp
 )
 
 ##############################################################
@@ -442,7 +443,7 @@ if(DOXYGEN_FOUND)
 	add_custom_target(doc
 		${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		COMMENT "Generating API documentation with Doxygen" VERBATIM
+		COMMENT "Generating documentation with Doxygen" VERBATIM
 	)
 endif(DOXYGEN_FOUND)
 
