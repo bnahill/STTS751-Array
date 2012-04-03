@@ -30,7 +30,7 @@ void Flash::init(uint32_t num_sensors_){
 	FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR |
 	                FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR|FLASH_FLAG_PGSERR);
 
-	for(auto i = (uint32_t)RESERVED_START; i < (uint32_t)(RESERVED_START + avail_words); i += avail_words){
+	for(auto i = (uint32_t)RESERVED_START; i < (uint32_t)(RESERVED_START + avail_words); i += 32768){
 		if(FLASH_EraseSector(get_sector(i), VoltageRange_3) != FLASH_COMPLETE)
 			while(1);	
 	}
