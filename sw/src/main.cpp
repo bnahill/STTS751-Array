@@ -3,6 +3,8 @@
 }
 
 #include "temp.h"
+#include "button.h"
+#include "flash.h"
 
 //! A single millisecond tick
 #define SYSTICK_MS (((double)SystemCoreClock / 8.0) / 1000.0)
@@ -44,13 +46,22 @@ int main(void){
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(LED_GPIO, &GPIO_InitStructure);
-
+	
 	TemperatureSensor::init();
 
+	Button::init();
+
+	// Wait for a button press
+	while(!Button::read());
+
+	// Initialize (erase) flash
+	Flash::init(TemperatureSensor::num_sensors);
+	
 	// Configure SysTick for 200ms period	
 	if(SysTick_Config(200.0 * SYSTICK_MS)){
 		while(1);
 	}
+
 	// THEN specify to divide this clock by 8
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
 

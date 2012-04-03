@@ -37,14 +37,14 @@ set(MCU cortex-m4)
 set(MCFLAGS "-mcpu=${MCU} -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
 
 add_definitions(${MCFLAGS})
-add_definitions(-g -ffunction-sections -fdata-sections -fpromote-loop-indices -Wredundant-decls -Wshadow -Wcast-qual -Wcast-align)
+add_definitions(-g  -fdata-sections -fpromote-loop-indices -Wredundant-decls -Wshadow -Wcast-qual -Wcast-align)
 add_definitions(-DUSE_STDPERIPH_DRIVER -DSTM32F4XX -DHSE_VALUE=8000000 -DARM_MATH_CM4 -D__FPU_PRESENT)
 
 # Eliminate the need for a bunch of extra support code that may not work on the chip anyways
 set(CMAKE_CXX_FLAGS "--std=c++0x -fno-rtti -fno-exceptions")
 # Use the new C11 standard
 set(CMAKE_C_FLAGS "--std=c1x")
-set(CMAKE_EXE_LINKER_FLAGS "-T${CMAKE_SOURCE_DIR}/stm32_flash.ld -Wl,-Map=${TARGET}.map,--cref,--gc-sections -nostdlib ${MCFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "-Tlink.ld -Wl,-Map=${TARGET}.map,--cref,--gc-sections -nostdlib ${MCFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
 
 include_directories(
 	.
@@ -353,6 +353,8 @@ set_property(SOURCE ${SYSTEM_DIR}/startup_stm32f4xx.s PROPERTY LANGUAGE C)
 set(APP_SOURCES
 	${APP_DIR}/temp.cpp
 	${APP_DIR}/main.cpp
+	${APP_DIR}/button.cpp
+	${APP_DIR}/flash.cpp
 )
 
 ##############################################################
@@ -365,6 +367,11 @@ add_library(std_periph STATIC ${STM_SOURCES})
 add_library(cmsis_dsp STATIC ${CMSIS_DSP_SOURCES})
 add_executable(${OUTFILE} ${APP_SOURCES} ${SYSTEM_SOURCES})
 target_link_libraries(${OUTFILE} std_periph cmsis_dsp)
+
+# Funky workaround to make target dependent on linker script
+add_custom_command(OUTPUT link.ld COMMAND cat ${CMAKE_SOURCE_DIR}/stm32_flash.ld > link.ld DEPENDS ${CMAKE_SOURCE_DIR}/stm32_flash.ld)
+add_custom_target(linker_script DEPENDS link.ld)
+add_dependencies(${OUTFILE} linker_script)
 
 # Warnings only for application code -- Optimizations only on ST/ARM code
 set_target_properties(${OUTFILE} PROPERTIES COMPILE_FLAGS "-W -O0")

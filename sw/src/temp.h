@@ -11,7 +11,7 @@ extern "C" {
 /*!
  @brief An interface to the temperature sensors
  */
-class TemperatureSensor{
+class TemperatureSensor {
 public:
 	/*!
 	 @brief Read the temperature value for the provided sensor

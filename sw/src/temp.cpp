@@ -3,6 +3,7 @@ extern "C" {
 }
 
 #include "temp.h"
+#include "flash.h"
 
 #define COUNT(arr) (sizeof(arr) / sizeof(*arr))
 
@@ -93,10 +94,12 @@ static const struct {
 	I2C_TypeDef *I2C;
 	uint8_t      device;
 } temp_devices_init[] = {
+	{I2CA, STTS_ADDR_1_7_5K},
 	{I2CA, STTS_ADDR_1_12K},
-//	{I2CA, STTS_ADDR_1_33K},
-//	{I2CB, STTS_ADDR_1_12K},
-//	{I2CB, STTS_ADDR_1_33K},
+	{I2CA, STTS_ADDR_1_20K},
+	{I2CB, STTS_ADDR_1_7_5K},
+	{I2CB, STTS_ADDR_1_12K},
+	{I2CB, STTS_ADDR_1_20K},
 };
 
 const int TemperatureSensor::num_sensors = COUNT(temp_devices_init);
@@ -247,7 +250,10 @@ void TemperatureSensor::read_all(void){
 	TemperatureSensor *sensor;
 	// Just read each sensor in series
 	for(sensor = sensors; sensor < sensors + num_sensors; sensor++){
-		*(result++) = sensor->read();
+		*result = sensor->read();
+		if(Flash::is_ready())
+			Flash::write_float(*result);
+		result += 1;
 	}
 }
 
