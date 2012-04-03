@@ -1,6 +1,8 @@
 import struct
 from math import isnan
+import pylab
 import sys
+
 def read_data(fname):
 	with open(fname) as f:
 		a = f.read()
@@ -17,7 +19,7 @@ def read_data(fname):
 				exit = True
 				break
 			arr.append(f)
-		a = a[num_sensors:]
+		a = a[num_sensors*4:]
 		if exit:
 			break
 	return out
@@ -29,3 +31,7 @@ if __name__ == '__main__':
 		data = read_data(sys.argv[1])
 	except IndexError:
 		sys.exit("Please provide a filename to read")
+	for (d,cnt) in zip(data,range(1,len(data)+1)):
+		#pylab.subplot(str(len(data))+"1"+str(cnt))
+		pylab.plot(d, aa=True)
+	pylab.show()
