@@ -14,6 +14,7 @@
 #define ADDR_FLASH_SECTOR_11    ((uint32_t)0x080E0000) /* Base @ of Sector 11, 128 Kbytes */ 
 
 #define RESERVED_START (&num_sensors)
+#define SECTOR_SIZE    (ADDR_FLASH_SECTOR_7 - ADDR_FLASH_SECTOR_6)
 
 const uint32_t Flash::avail_words = 0x20000 - 1;
 
@@ -30,7 +31,7 @@ void Flash::init(uint32_t num_sensors_){
 	FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR |
 	                FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR|FLASH_FLAG_PGSERR);
 
-	for(auto i = (uint32_t)RESERVED_START; i < (uint32_t)(RESERVED_START + avail_words); i += 32768){
+	for(auto i = (uint32_t)RESERVED_START; i < (uint32_t)(RESERVED_START + avail_words); i += SECTOR_SIZE){
 		if(FLASH_EraseSector(get_sector(i), VoltageRange_3) != FLASH_COMPLETE)
 			while(1);	
 	}
