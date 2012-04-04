@@ -43,6 +43,9 @@ void Flash::init(uint32_t num_sensors_){
 }
 
 void Flash::write_float(float data){
+	// Check to make sure we are still in range
+	if(offset >= avail_words)
+		return;
 	FLASH_ProgramWord((uint32_t)(sensor_data + offset), *((uint32_t *)(&data)));
 	offset += 1;
 }
@@ -72,5 +75,7 @@ uint32_t Flash::get_sector(uint32_t addr){
 		return FLASH_Sector_9;
 	if(addr < ADDR_FLASH_SECTOR_11)
 		return FLASH_Sector_10;
-	return FLASH_Sector_11;
+	if(addr < (ADD_FLASH_SECTOR_11 + SECTOR_SIZE))
+		return FLASH_Sector_11;
+	while(1);
 }
