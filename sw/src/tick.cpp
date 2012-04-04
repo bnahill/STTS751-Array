@@ -13,9 +13,11 @@ bool Tick::start(float period_ms){
 	return ret;
 }
 
-void Tick::wait(){
-	while(tick == 0);
-	tick = 0;
+void Tick::wait(uint32_t num_ticks){
+	while(num_ticks--){
+		while(tick == 0);
+		tick = 0;
+	}
 }
 
 void SysTick_Handler(void){

@@ -3,10 +3,6 @@
 
 extern "C" {
 	#include "stm32f4xx_conf.h"
-};
-
-// Symbols to define as C symbols
-extern "C"{
 	void SysTick_Handler(void);
 };
 
@@ -26,9 +22,10 @@ public:
 	static bool start(float period_ms);
 
 	/*!
-	 @brief Wait for the next tick
+	 @brief Wait for some number of ticks
+	 @param num_ticks Number of ticks to wait
 	 */
-	static void wait();
+	static void wait(uint32_t num_ticks = 1);
 
 	friend void SysTick_Handler(void);
 private:
