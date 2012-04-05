@@ -1,6 +1,7 @@
 import struct
 from math import isnan
 import pylab
+from scipy.io import savemat
 import sys
 
 def read_data(fname):
@@ -34,4 +35,12 @@ if __name__ == '__main__':
 	for (d,cnt) in zip(data,range(1,len(data)+1)):
 		#pylab.subplot(str(len(data))+"1"+str(cnt))
 		pylab.plot(d, aa=True)
+	try:
+		fname = sys.argv[2]
+		mdict = dict()
+		for (d,cnt) in zip(data,range(1,len(data)+1)):
+			mdict["sensor"+(str(cnt))] = d
+		savemat(fname, mdict)
+	except IndexError:
+		pass
 	pylab.show()
