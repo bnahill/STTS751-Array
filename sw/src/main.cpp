@@ -51,23 +51,23 @@ int main(void){
 	Flash::init(TemperatureSensor::num_sensors);
 	
 	// Configure SysTick for 200ms period	
-	if(!Tick::start(200)){
+	if(!Tick::start(400)){
 		while(1);
 	}
 
 	while (1){
 		LED_SET(0);
-		Tick::wait();
+		Tick::wait(1);
 		LED_SET(1);
-		Tick::wait();
+		Tick::wait(1);
 		LED_SET(2);
-		Tick::wait();
+		Tick::wait(1);
 		LED_SET(3);
-		Tick::wait();
+		Tick::wait(1);
 
 		LED_CLR_ALL();
 
-		Tick::wait();
+		Tick::wait(1);
 
 		TemperatureSensor::read_all();
 	}

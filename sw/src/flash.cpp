@@ -13,8 +13,9 @@
 #define ADDR_FLASH_SECTOR_10    ((uint32_t)0x080C0000) /* Base @ of Sector 10, 128 Kbytes */
 #define ADDR_FLASH_SECTOR_11    ((uint32_t)0x080E0000) /* Base @ of Sector 11, 128 Kbytes */ 
 
+#define SECTOR_BYTES  (ADDR_FLASH_SECTOR_7 - ADDR_FLASH_SECTOR_6)
 #define RESERVED_START (&num_sensors)
-#define SECTOR_SIZE    (ADDR_FLASH_SECTOR_7 - ADDR_FLASH_SECTOR_6)
+#define FLASH_END (ADDR_FLASH_SECTOR_11 + SECTOR_BYTES)
 
 const uint32_t Flash::avail_words = 0x20000 - 1;
 
@@ -31,8 +32,8 @@ void Flash::init(uint32_t num_sensors_){
 	FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR |
 	                FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR|FLASH_FLAG_PGSERR);
 
-	for(auto i = (uint32_t)RESERVED_START; i < (uint32_t)(RESERVED_START + avail_words); i += SECTOR_SIZE){
-		if(FLASH_EraseSector(get_sector(i), VoltageRange_3) != FLASH_COMPLETE)
+	for(auto i = RESERVED_START; i < RESERVED_START + avail_words; i += (SECTOR_BYTES / sizeof(float))){
+		if(FLASH_EraseSector(get_sector((uint32_t)i), VoltageRange_3) != FLASH_COMPLETE)
 			while(1);	
 	}
 	
@@ -43,10 +44,15 @@ void Flash::init(uint32_t num_sensors_){
 }
 
 void Flash::write_float(float data){
+	uint32_t addr = (uint32_t)(sensor_data + offset);
+	
 	// Check to make sure we are still in range
-	if(offset >= avail_words)
+	if(addr >= FLASH_END){
+		ready = false;
 		return;
-	FLASH_ProgramWord((uint32_t)(sensor_data + offset), *((uint32_t *)(&data)));
+	}
+
+	FLASH_ProgramWord(addr, *((uint32_t *)(&data)));
 	offset += 1;
 }
 
@@ -75,7 +81,7 @@ uint32_t Flash::get_sector(uint32_t addr){
 		return FLASH_Sector_9;
 	if(addr < ADDR_FLASH_SECTOR_11)
 		return FLASH_Sector_10;
-	if(addr < (ADD_FLASH_SECTOR_11 + SECTOR_SIZE))
+	if(addr < (ADDR_FLASH_SECTOR_11 + SECTOR_BYTES))
 		return FLASH_Sector_11;
 	while(1);
 }
