@@ -1,29 +1,21 @@
 #ifndef __BUTTON_H_
 #define __BUTTON_H_
 
-extern "C" {
-	#include "stm32f4xx_conf.h"
-};
+#include "stm32f4xx_conf.h"
 
-//! @ingroup util
+//! @addtogroup button Button
 //! @{
 
 /*!
- @brief Class to access button
+ @brief Initialize button hardware
  */
-class Button {
-public:
-	/*!
-	 @brief Initialize button hardware
-	 */
-	static void init();
+void button_init();
 
-	/*!
-	 @brief Read the value
-	 @return True if pressed
-	 */
-	static bool read();
-};
+/*!
+ @brief Read the value
+ @return True if pressed
+ */
+int button_read();
 
 //! @}
 

@@ -351,11 +351,11 @@ set(SYSTEM_SOURCES
 set_property(SOURCE ${SYSTEM_DIR}/startup_stm32f4xx.s PROPERTY LANGUAGE C)
 
 set(APP_SOURCES
-	${APP_DIR}/temp.cpp
-	${APP_DIR}/main.cpp
-	${APP_DIR}/button.cpp
-	${APP_DIR}/flash.cpp
-	${APP_DIR}/tick.cpp
+	${APP_DIR}/temp.c
+	${APP_DIR}/main.c
+	${APP_DIR}/button.c
+	${APP_DIR}/flash.c
+	${APP_DIR}/tick.c
 )
 
 ##############################################################
