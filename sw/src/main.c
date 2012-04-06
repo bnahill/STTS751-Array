@@ -1,4 +1,4 @@
-﻿#include "stm32f4xx_conf.h"
+#include "stm32f4xx_conf.h"
 
 #include "temp.h"
 #include "button.h"
@@ -19,9 +19,10 @@
 //! @}
 
 int main(void){
+	GPIO_InitTypeDef GPIO_InitStructure;
+	
 	// GPIOD Periph clock enable
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD | RCC_AHB1Periph_GPIOC, ENABLE);
-	GPIO_InitTypeDef GPIO_InitStructure;
 
 	// Configure LEDs in output pushpull mode
 	GPIO_InitStructure.GPIO_Pin = LED_PIN_ALL;
@@ -41,8 +42,8 @@ int main(void){
 	// Initialize (erase) flash
 	flash_init(temp_num_sensors);
 	
-	// Configure SysTick for 200ms period	
-	if(!tick_start(400)){
+	// Configure SysTick for 400ms period	
+	if(!tick_start(400.0)){
 		while(1);
 	}
 

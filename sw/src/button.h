@@ -9,13 +9,13 @@
 /*!
  @brief Initialize button hardware
  */
-void button_init();
+void button_init(void);
 
 /*!
  @brief Read the value
  @return True if pressed
  */
-int button_read();
+int button_read(void);
 
 //! @}
 

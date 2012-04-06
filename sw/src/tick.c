@@ -1,13 +1,13 @@
 #include "tick.h"
 
 //! A single millisecond tick
-#define SYSTICK_MS (((double)SystemCoreClock / 8.0) / 1000.0)
+#define SYSTICK_MS(ms) ((ms*SystemCoreClock) / 8000.0)
 
 //! The actual tick resource
 static volatile int tick;
 
 int tick_start(float period_ms){
-	if(SysTick_Config((float)period_ms * SYSTICK_MS))
+	if(SysTick_Config(SYSTICK_MS(period_ms)))
 		return 0;
 	tick = 0;
 	// THEN specify to divide this clock by 8

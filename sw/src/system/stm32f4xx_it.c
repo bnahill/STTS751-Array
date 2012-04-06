@@ -48,7 +48,7 @@
   * @param  None
   * @retval None
   */
-__attribute__ ((weak)) void NMI_Handler(void)
+void NMI_Handler(void)
 {
 }
 
@@ -57,7 +57,7 @@ __attribute__ ((weak)) void NMI_Handler(void)
   * @param  None
   * @retval None
   */
-__attribute__ ((weak)) void HardFault_Handler(void)
+void HardFault_Handler(void)
 {
   /* Go to infinite loop when Hard Fault exception occurs */
   while (1)
@@ -70,7 +70,7 @@ __attribute__ ((weak)) void HardFault_Handler(void)
   * @param  None
   * @retval None
   */
-__attribute__ ((weak)) void MemManage_Handler(void)
+void MemManage_Handler(void)
 {
   /* Go to infinite loop when Memory Manage exception occurs */
   while (1)
@@ -83,7 +83,7 @@ __attribute__ ((weak)) void MemManage_Handler(void)
   * @param  None
   * @retval None
   */
-__attribute__ ((weak)) void BusFault_Handler(void)
+void BusFault_Handler(void)
 {
   /* Go to infinite loop when Bus Fault exception occurs */
   while (1)
@@ -96,7 +96,7 @@ __attribute__ ((weak)) void BusFault_Handler(void)
   * @param  None
   * @retval None
   */
-__attribute__ ((weak)) void UsageFault_Handler(void)
+void UsageFault_Handler(void)
 {
   /* Go to infinite loop when Usage Fault exception occurs */
   while (1)
@@ -109,7 +109,7 @@ __attribute__ ((weak)) void UsageFault_Handler(void)
   * @param  None
   * @retval None
   */
-__attribute__ ((weak)) void SVC_Handler(void)
+void SVC_Handler(void)
 {
 }
 
@@ -118,7 +118,7 @@ __attribute__ ((weak)) void SVC_Handler(void)
   * @param  None
   * @retval None
   */
-__attribute__ ((weak)) void DebugMon_Handler(void)
+void DebugMon_Handler(void)
 {
 }
 
@@ -127,18 +127,10 @@ __attribute__ ((weak)) void DebugMon_Handler(void)
   * @param  None
   * @retval None
   */
- __attribute__ ((weak)) void PendSV_Handler(void)
+ void PendSV_Handler(void)
 {
 }
 
-/**
-  * @brief  This function handles SysTick Handler.
-  * @param  None
-  * @retval None
-  */
-__attribute__ ((weak)) void SysTick_Handler(void)
-{
-}
 
 /******************************************************************************/
 /*                 STM32F4xx Peripherals Interrupt Handlers                   */

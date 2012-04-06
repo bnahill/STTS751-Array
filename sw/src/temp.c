@@ -33,17 +33,17 @@
 
 //! @name I2C Addresses for STTS751-0xxxx
 //! @{
-#define STTS_ADDR_0_7_5K 0b10010000
-#define STTS_ADDR_0_12K  0b10010010
-#define STTS_ADDR_0_20K  0b01110000
-#define STTS_ADDR_0_33K  0b01110010
+#define STTS_ADDR_0_7_5K 0x90
+#define STTS_ADDR_0_12K  0x92
+#define STTS_ADDR_0_20K  0x70
+#define STTS_ADDR_0_33K  0x72
 //! @}
 //! @name I2C Addresses for STTS751-1xxxx
 //! @{
-#define STTS_ADDR_1_7_5K 0b10010100
-#define STTS_ADDR_1_12K  0b10010110
-#define STTS_ADDR_1_20K  0b01110100
-#define STTS_ADDR_1_33K  0b01110110
+#define STTS_ADDR_1_7_5K 0x94
+#define STTS_ADDR_1_12K  0x96
+#define STTS_ADDR_1_20K  0x74
+#define STTS_ADDR_1_33K  0x76
 //! @}
 
 //! @name STTS751 Register map
@@ -105,28 +105,31 @@ const int temp_num_sensors = COUNT(temp_sensors);
 
 /*!
  @brief Read a single byte from the provided address
+ @param sensor The sensor
  @param address The address in the peripheral memory to read from
  @return The value at that address
  */
-static uint8_t read_byte(temp_sensor_t *restrict sensor, uint8_t address);
+static uint8_t read_byte(temp_sensor_t *RESTRICT sensor, uint8_t address);
 
 /*!
  @brief Initialize the device
+ @param sensor The sensor
  
  @pre temp_init() has run
  @post The device is configured for 12-bit precision
  
  This is intended to be done by temp_init() and involves I2C write
  */
-static void sensor_init(temp_sensor_t *restrict sensor);
+static void sensor_init(temp_sensor_t *RESTRICT sensor);
 
 /*!
  @brief Write a single byte to the address specified
+ @param sensor The sensor
 
  @param address The address within the peripheral's memory to write to
  @param data    The data to write
  */
-static void write_byte(temp_sensor_t *restrict sensor, uint8_t address, uint8_t data);
+static void write_byte(temp_sensor_t *RESTRICT sensor, uint8_t address, uint8_t data);
 
 /////////////////////////////////////////////////////////
 // Public functions
@@ -203,16 +206,16 @@ void temp_read_all(void){
 	}
 }
 
-uint8_t temp_read_status(temp_sensor_t *restrict sensor){
+uint8_t temp_read_status(temp_sensor_t *RESTRICT sensor){
 	sensor->status = read_byte(sensor, TEMP_ADDR_STAT);
 	return sensor->status;
 }
 
-float temp_read(temp_sensor_t *restrict sensor){
+float temp_read(temp_sensor_t *RESTRICT sensor){
 	uint8_t buffer[2];
 	buffer[0] = read_byte(sensor, TEMP_ADDR_T_HI);
 	buffer[1] = read_byte(sensor, TEMP_ADDR_T_LO);
-	sensor->temperature = ((float)(buffer[0] & 0x7F)) + ((float)buffer[1])/256.0;
+	sensor->temperature = ((float)(buffer[0] & 0x7F)) + (float)buffer[1] / 256;
 	if(buffer[0] & 0x80)
 		sensor->temperature = -sensor->temperature;
 	sensor->num_readings += 1;
@@ -224,11 +227,11 @@ float temp_read(temp_sensor_t *restrict sensor){
 // Private functions
 /////////////////////////////////////////////////////////
 
-static void sensor_init(temp_sensor_t *restrict sensor){
-	write_byte(sensor, TEMP_ADDR_CONF, 0b00001100);
+static void sensor_init(temp_sensor_t *RESTRICT sensor){
+	write_byte(sensor, TEMP_ADDR_CONF, 0x0C);
 }
 
-static uint8_t read_byte(temp_sensor_t *restrict sensor, uint8_t address){
+static uint8_t read_byte(temp_sensor_t *RESTRICT sensor, uint8_t address){
 	uint8_t data;
 	while(I2C_GetFlagStatus(sensor->I2C, I2C_FLAG_BUSY));
 	I2C_GenerateSTART(sensor->I2C, ENABLE);
@@ -252,7 +255,7 @@ static uint8_t read_byte(temp_sensor_t *restrict sensor, uint8_t address){
 	return data;
 }
 
-static void write_byte(temp_sensor_t *restrict sensor, uint8_t address, uint8_t data){
+static void write_byte(temp_sensor_t *RESTRICT sensor, uint8_t address, uint8_t data){
 	while(I2C_GetFlagStatus(sensor->I2C, I2C_FLAG_BUSY));
 	I2C_GenerateSTART(sensor->I2C, ENABLE);
 	while (!I2C_CheckEvent(sensor->I2C, I2C_EVENT_MASTER_MODE_SELECT));

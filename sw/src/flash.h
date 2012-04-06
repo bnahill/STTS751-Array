@@ -22,7 +22,7 @@ void flash_write_float(float data);
  @brief Is flash initialized?
  @return True if it's ready
  */
-int flash_is_ready();
+int flash_is_ready(void);
 
 //! @}
 

@@ -19,7 +19,7 @@
 
 //! The size of FP storage in 32-bit words
 #define AVAIL_WORDS (0x20000 - 1)
-//! The current offset from the begining of #sensor_data to be writing
+//! The current offset from the begining of @a sensor_data to be writing
 static uint32_t offset = 0;
 //! Flag indicatiing that device is ready to write	
 static int ready = 0;
@@ -30,12 +30,21 @@ static int ready = 0;
 //! The following are actually located in flash and are not directly writable
 //! This order is important, as it ensures that &num_sensors is the correct start address...
 
-//! The number of sensors in the system; useful for data decoding
-static uint32_t num_sensors __attribute__ ((section(".store")));
-//! The actual sensor data
-static float sensor_data[AVAIL_WORDS] __attribute__ ((section(".store")));
-//! @}
+//! @var num_sensors
+//! @brief The number of sensors in the system; useful for data decoding
 
+//! @var sensor_data
+//! @brief The actual sensor data logs
+
+#ifdef __CC_ARM
+static uint32_t num_sensors __attribute__((at(0x8080000)));
+static float sensor_data[AVAIL_WORDS] __attribute__((at(0x8080004)));
+#else
+static uint32_t num_sensors __attribute__((section(".store")));
+static float sensor_data[AVAIL_WORDS] __attribute__((section(".store")));
+#endif
+
+//! @}
 
 /*!
  @brief Convert an address to a sector

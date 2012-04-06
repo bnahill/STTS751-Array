@@ -3,6 +3,8 @@
 
 #include "stm32f4xx_conf.h"
 
+#include "toolchain.h"
+
 //! @addtogroup temp STTS751 Temperature Sensor
 //! @{
 
@@ -21,25 +23,27 @@ typedef struct {
 
 /*!
  @brief Read the temperature value for the provided sensor
+ @param sensor The sensor
  @return Temperature
 
- @post The temperature value will be stored in #temperature and the 
+ @post The temperature value will be stored in @a sensor and the 
  reading count will be incremented.
  */
-float temp_read(temp_sensor_t *restrict sensor);
+float temp_read(temp_sensor_t *RESTRICT sensor);
 
 /*!
  @brief Read the status register from the sensor and save it
+ @param sensor The sensor
  @return The status
- @post #status is set
+ @post @a Status is set
  */
-uint8_t  temp_read_status(temp_sensor_t *restrict sensor);
+uint8_t  temp_read_status(temp_sensor_t *RESTRICT sensor);
 
 /*!
  @brief The number of sensors; Compile-time constant determined by values 
  in temp.cpp
  */
-const int temp_num_sensors;
+extern const int temp_num_sensors;
 
 /*!
  @brief Initialize the hardware associated with the sensors
@@ -49,13 +53,13 @@ const int temp_num_sensors;
 void temp_init(void);
 
 /*!
- @brief Read the values of all sensors. If Flash has been initialized,
+ @brief Read the values of all sensors. If flash has been initialized,
  the value will be written to flash as well.
  */
 void temp_read_all(void);
 
 //! The temperature sensor devices
-//extern temp_sensor_t temp_sensors[];
+extern temp_sensor_t temp_sensors[];
 
 //! @}
 
