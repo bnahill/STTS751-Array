@@ -93,11 +93,13 @@ LoopFillZerobss:
   cmp  r2, r3
   bcc  FillZerobss
 
-/* FPU settings */
- ldr     r0, =0xE000ED88           /* Enable CP10,CP11 */
+/* FPU settings (handled in system_stm32....) */
+/*
+ ldr     r0, =0xE000ED88
  ldr     r1,[r0]
  orr     r1,r1,#(0xF << 20)
  str     r1,[r0]
+*/
 /* Call the clock system intitialization function.*/
   bl  SystemInit   
 /* Call the application's entry point.*/
